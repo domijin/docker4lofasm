@@ -10,6 +10,9 @@ docker build -t lofasm_py2 .
 docker run -d -p 2222:22 -v data_dir/in/host:/data_dir/in/container lofasm_py2
 # ssh in
 ssh -Y -p 2222 lof@localhost
+
+# or run in interactive way, the data files will be shared and the container will burn once exit
+docker run -it --rm -v data_dir/in/host:/data_dir/in/container lofasm_py2 /bin/bash
 ```
 
 
