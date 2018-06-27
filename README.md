@@ -12,11 +12,11 @@ docker run -d -p 2222:22 -v data_dir/in/host:/data_dir/in/container lofasm_py2
 ssh -p 2222 lof@localhost
 
 # or run in desktop mode, with vnc, add '--rm' if just exploring
-docker run -p 5901:5901 -v data_dir/in/host:/data_dir/in/container --user=lof lofasm_py2 bash -c "vncserver :1 -geometry 1280x800 -depth 24 && tail -F ~/.vnc/*.log"
+docker run -it -p 5901:5901 -v data_dir/in/host:/data_dir/in/container -e USER=lof lofasm_py2 bash -c "vncserver :1 -geometry 1280x800 -depth 24 && tail -F ~/.vnc/*.log"
 # then use vnc viewer to access vnc://localhost:5901 with the password you set
 
-# or run in interactive way, the data files will be shared and the container will burn once exit, su password is 'Docker!'
-docker run -it --rm -v data_dir/in/host:/data_dir/in/container --user=lof lofasm_py2 bash
+# or run in interactive way, the data files will be shared and the container will burn once exit (--rm), su password is 'Docker!'
+docker run -it --rm -v data_dir/in/host:/data_dir/in/container -e USER=lof --user=lof lofasm_py2 bash
 ```
 
 You can install & start a Jupyter Notebook server and interact via your browser:
