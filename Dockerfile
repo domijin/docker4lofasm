@@ -1,4 +1,4 @@
-# Copyright (C) 2016 by Dongming Jin
+# Copyright (C) 2018 by Dongming Jin
 # Licensed under the Academic Free License version 3.0
 # This program comes with ABSOLUTELY NO WARRANTY.
 # You are free to modify and redistribute this code as long
@@ -62,5 +62,17 @@ USER root
 RUN cd /home/lof/lofasm && pip install -r requirements.txt && python setup.py install
 
 
-EXPOSE 22
+# Create space for ssh deamon and update the system
+RUN mkdir /var/run/sshd && \
+    apt-get -y check && \
+    apt-get -y update && \
+    apt-get install -y apt-utils apt-transport-https software-properties-common && \
+    apt-get -y upgrade
+
+RUN apt-get -y install openssh-server # gv ghostscript
+RUN apt-get -y install lxde-core 
+RUN apt-get -y install tightvncserver  # desktop environment for easy use, disable for server
+
+EXPOSE 22 5901 8888
 CMD ["/usr/sbin/sshd", "-D"]
+

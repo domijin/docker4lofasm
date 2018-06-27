@@ -8,17 +8,20 @@ docker build -t lofasm_py2 .
 
 # run as detached server
 docker run -d -p 2222:22 -v data_dir/in/host:/data_dir/in/container lofasm_py2
-# ssh in
-ssh -Y -p 2222 lof@localhost
+# ssh in, default password: psr
+ssh -p 2222 lof@localhost
 
-# or run in interactive way, the data files will be shared and the container will burn once exit
-docker run -it --rm -v data_dir/in/host:/data_dir/in/container lofasm_py2 /bin/bash
+# or run in desktop mode, with vnc, add '--rm' if just exploring
+docker run -p 5901:5901 -v data_dir/in/host:/data_dir/in/container --user=lof lofasm_py2 bash -c "vncserver :1 -geometry 1280x800 -depth 24 && tail -F ~/.vnc/*.log"
+# then use vnc viewer to access vnc://localhost:5901 with the password you set
+
+# or run in interactive way, the data files will be shared and the container will burn once exit, su password is 'Docker!'
+docker run -it --rm -v data_dir/in/host:/data_dir/in/container --user=lof lofasm_py2 bash
 ```
 
+You can install & start a Jupyter Notebook server and interact via your browser:
 
-You can start a Jupyter Notebook server and interact via your browser:
-
-`docker run -it -p 8888:8888 lofasm_py2 /bin/bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks && /opt/conda/bin/jupyter notebook --notebook-dir=/opt/notebooks --ip='*' --port=8888 --no-browser"`
+`docker run -it -p 8888:8888 lofasm_py2 bash -c "/opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks && /opt/conda/bin/jupyter notebook --notebook-dir=/opt/notebooks --ip='*' --port=8888 --no-browser"`
 
 You can then view the Jupyter Notebook by opening `http://localhost:8888` in your browser, or `http://<DOCKER-MACHINE-IP>:8888` if you are using a Docker Machine VM.
 
