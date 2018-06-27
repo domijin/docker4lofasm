@@ -61,7 +61,6 @@ RUN git clone https://github.com/arcc/lofasm.git
 USER root
 RUN cd /home/lof/lofasm && pip install -r requirements.txt && python setup.py install
 
-
 # Create space for ssh deamon and update the system
 RUN mkdir /var/run/sshd && \
     apt-get -y check && \
@@ -69,9 +68,16 @@ RUN mkdir /var/run/sshd && \
     apt-get install -y apt-utils apt-transport-https software-properties-common && \
     apt-get -y upgrade
 
-RUN apt-get -y install openssh-server # gv ghostscript
+
+# desktop environment for easy use, disable for server
+RUN apt-get -y install openssh-server 
 RUN apt-get -y install lxde-core 
-RUN apt-get -y install tightvncserver  # desktop environment for easy use, disable for server
+RUN apt-get -y install tightvncserver  
+
+# install basic gui app for easier use
+RUN apt-get -y install midori  # web browser
+RUN apt-get -y install leafpad  # text editor
+RUN apt-get -y install gv  # eps viewer, or ghostscript
 
 EXPOSE 22 5901 8888
 CMD ["/usr/sbin/sshd", "-D"]
